@@ -1,0 +1,17 @@
+.DS_Store
+/target/
+/results/
+/inputs/
+Archive.zip
+**/*.rs.bk
+*.out
+
+.idea
+.idea/*.xml
+.idea/misc.xml
+.idea/modules.xml
+.idea/workspace.xml
+.idea/dictionaries/
+.idea/*
+.idea/**
+.idea/**.*
