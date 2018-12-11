@@ -1,5 +1,5 @@
 use evo_sys::eval::eval;
-use evo_sys::{ResultMap, Program, Instruction, ProgramFragment, FeatLoadInfo, ProgInspectRequest};
+use evo_sys::{ResultMap, Program, Instruction, ProgInspectRequest};
 use evo_sys::eval::Evaluator;
 use evo_sys::params as evo_params;
 use data::{DataSet};
@@ -25,16 +25,16 @@ impl ResultMap{
         for _ in 0..config.pop_size{
             prog_map.push(None);
         }
-        let feat_frags = VecDeque::with_capacity(evo_params::QUEUE_LEN);
-        let instr_frags = VecDeque::with_capacity(evo_params::QUEUE_LEN);
+//        let feat_frags = VecDeque::with_capacity(evo_params::QUEUE_LEN);
+//        let instr_frags = VecDeque::with_capacity(evo_params::QUEUE_LEN);
 
         ResultMap{
             prog_map,
             config,
             sent_count: 0,
             recieved_count: 0,
-            feat_frags,
-            instr_frags,
+//            feat_frags,
+//            instr_frags,
         }
     }
 
@@ -44,14 +44,15 @@ impl ResultMap{
         let mutate_method = self.config.mutate_method;
 
         let mut rng = rand::thread_rng();
-        for _ in 0..evo_params::QUEUE_LEN{
-            let mut frag = Vec::with_capacity(1);
-            frag.push(Instruction::new_rand_instr(&self.config.prog_defaults, &mut rng));
-            self.instr_frags.push_back(ProgramFragment{instructions:frag});
-            let reg_i = rng.gen_range(0, self.config.prog_defaults.initial_regs);
-            let feat_i = rng.gen_range(0, N_FEATURES);
-            self.feat_frags.push_back(FeatLoadInfo{reg_i ,feat_i});
-        }
+
+//        for _ in 0..evo_params::QUEUE_LEN{
+//            let mut frag = Vec::with_capacity(1);
+//            frag.push(Instruction::new_rand_instr(&self.config.prog_defaults, &mut rng));
+//            self.instr_frags.push_back(ProgramFragment{instructions:frag});
+//            let reg_i = rng.gen_range(0, self.config.prog_defaults.initial_regs);
+//            let feat_i = rng.gen_range(0, N_FEATURES);
+//            self.feat_frags.push_back(FeatLoadInfo{reg_i ,feat_i});
+//        }
 
         while self.recieved_count < self.config.n_evals {
             if evaluator.can_recieve() {
@@ -124,7 +125,7 @@ impl ResultMap{
 
         while tries < self.config.pop_size * 10000 {
             if let Some(ref parent) = self.prog_map[tr.gen_range(0, self.config.pop_size)] {
-                let prog = parent.mutate_copy(&mut self.instr_frags, &mut self.feat_frags, mutation_code);
+                let prog = parent.mutate_copy( mutation_code);
                 let inds = self.select_cell(&prog);
 
                 if self.is_in_bounds(inds){

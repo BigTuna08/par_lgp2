@@ -67,11 +67,11 @@ pub struct ProgDefaults{
     pub initial_instr_min: usize,
     pub initial_instr_max: usize,
 
-    pub initial_header_instr_min: usize,
-    pub initial_header_instr_max: usize,
+    pub initial_comp_reg_min: u8,
+    pub initial_comp_reg_max: u8,
 
-    pub initial_regs: u8,
-    pub ops: Vec<u8>,
+//    pub initial_regs: u8,
+//    pub ops: Vec<u8>,
 
     pub initial_feat_min: u8,
     pub initial_feat_max: u8,

@@ -30,9 +30,20 @@ pub const INSTR_OPTIONS: [u8; N_INSTR_OPTIONS] = [0, 1, 2, 3, 6, 7];
 pub const QUEUE_LEN: usize = 20;
 
 
+
+
+
 //
-//pub const INSTR_INSERT_RATE: u32 = 50; //rate to insert new instruction after copying instruction
-////pub const INSTR_DUPL_RATE: u32 = 50; //rate to duplicate new instruction after copying instruction
-//pub const INSTR_DEL_RATE: u32 = 25; //rate to insert new instruction after copying instruction
-//
-//pub const MUT_INSTR_COPY_RATE: u32 = 20; // was 200
+pub const N_OPS: u8 = 6;
+
+
+
+
+//       I think the below are main ones used
+
+
+pub const INSTR_INSERT_RATE: u32 = 50; //rate to insert new instruction after copying instruction
+//pub const INSTR_DUPL_RATE: u32 = 50; //rate to duplicate new instruction after copying instruction
+pub const INSTR_DEL_RATE: u32 = 25; //rate to insert new instruction after copying instruction
+
+pub const MUT_INSTR_COPY_RATE: u32 = 20; // was 200

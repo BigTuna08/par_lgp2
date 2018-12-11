@@ -153,15 +153,22 @@ impl Logger{  // From prog
         f.write(b"\n");
 
 //        println!("writting genome with sizes {}, {}, {}", &genome.header_instructions.len(), &genome.features.len(), &genome.instructions.len());
-        for instr in genome.header_instructions.iter(){
-            let instr_str = self.string_instr(instr, &mut used_srcs);
-            f.write(instr_str.as_bytes());
-            f.write(b"\n");
-        }
-        f.write(b"\n");
+//        for instr in genome.header_instructions.iter(){
+//            let instr_str = self.string_instr(instr, &mut used_srcs);
+//            f.write(instr_str.as_bytes());
+//            f.write(b"\n");
+//        }
+//        f.write(b"\n");
+
+//        for instr in genome.features.iter(){
+//            let instr_str = format!("{}->\t${}", instr.feat_i, instr.reg_i);
+//            f.write(instr_str.as_bytes());
+//            f.write(b"\n");
+//        }
+//        f.write(b"\n");
 
         for instr in genome.features.iter(){
-            let instr_str = format!("{}->\t${}", instr.feat_i, instr.reg_i);
+            let instr_str = instr.to_string();
             f.write(instr_str.as_bytes());
             f.write(b"\n");
         }

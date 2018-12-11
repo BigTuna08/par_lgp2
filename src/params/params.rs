@@ -5,8 +5,7 @@ pub const MAP_COLS: usize = 128;
 
 pub const MAX_REGS: usize = 128; //was 128, risk of crashing if less than N_FEATURES, during feature loading. if > 256 will also crash!
 
-pub const N_OPS: u8 = 6;
-
+// pub const N_OPS: u8 = 6;  <-- moved to evo_sys params
 
 pub const EPS: f32 = 1e-6;
 pub const DUPLICATE_TIME_OUT: u32 = 100_000; //when trying to generate new number, quit after this many times
