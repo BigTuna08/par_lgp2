@@ -1,10 +1,10 @@
-//use csv;
+use csv;
 use csv::ReaderBuilder;
 //use params as global_params;
 use rand;
 use rand::Rng;
 use std::fs::File;
-//use std::sync::Arc;
+use std::sync::Arc;
 use data::{DataSet, DataRecord, params};
 
 impl DataRecord{
@@ -18,7 +18,7 @@ impl DataRecord{
 
 
 impl DataSet{
-    pub fn new_pair(data_file: &str) -> (Box<DataSet>, Box<DataSet>) {
+    pub fn new_pair(data_file: &str) -> (Box<DataSet>, Arc<DataSet>) {
         let mut rng = rand::thread_rng();
 
         ///             count # of cases and controls         ////
@@ -62,7 +62,7 @@ impl DataSet{
 
         for (record_i,result) in csv_rdr.records().enumerate() {
             if let Ok(result) = result{
-                println!("result is {:?}", result);
+//                println!("result is {:?}", result);
 
                 let mut class = None;
                 let mut features = [0.0f32; params::N_FEATURES as usize];
@@ -112,10 +112,32 @@ impl DataSet{
         (Box::new(DataSet{
             records:test_records
         }),
-        Box::new(DataSet{
+        Arc::new(DataSet{
             records:train_records
         })
         )
 
+    }
+
+    pub fn size(&self)->usize{
+        self.records.len()
+    }
+}
+
+pub fn get_headers(data_file: &str) -> Vec<String> {
+    match File::open(data_file){
+        Ok(f) => {
+            match csv::Reader::from_reader(f).headers() {
+                Ok(headers) => {
+                    let mut full_iter = headers.iter();
+                    full_iter.next();
+                    full_iter.next();
+                    full_iter.next();
+                    full_iter.map(|x|  x.to_string()).collect()
+                }
+                Err(e) =>panic!("couldnt get file headers!! error is :{:?}", e)
+            }
+        }
+        Err(e) => panic!("couldnt open file to get headers!! error is :{:?}", e)
     }
 }

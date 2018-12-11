@@ -1,6 +1,6 @@
 use params;
 
-use super::super::{ProgramOperation, Instruction, InstructionResult, ExecutionRegArray, InstructionType};
+use super::super::{Instruction, InstructionResult, ExecutionRegArray, InstructionType};
 
 
 pub fn execute_op(instr: &Instruction, regs: &ExecutionRegArray) -> InstructionResult{

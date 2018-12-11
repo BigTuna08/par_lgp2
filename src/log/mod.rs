@@ -17,12 +17,13 @@ pub struct Logger{
     geno_output_files: Vec<FileSet>,
 
     pub geno_functions: Vec<&'static GenoEval>,
+    pub data_headers: Vec<String>,
 
     feature_count: Option<File>,
     feature_distr: Option<File>,
 
     current_iter: u16,
-    current_fold: u8, //assumes 5 fold
+
 }
 
 struct FileSet{

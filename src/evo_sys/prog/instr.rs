@@ -1,8 +1,8 @@
 //use evo_sys::prog::get_src;
 //use evo_sys::{Program, Instruction, InstructionResult, InstructionType};
 //
-use evo_sys::{Instruction};
-use ProgDefaults;
+use evo_sys::{Instruction, InstructionType};
+use core::config::ProgDefaults;
 use params::params::MAX_REGS;
 use core::RegIndType;
 
@@ -30,6 +30,32 @@ impl Instruction{
             src2: rng.gen_range(0, MAX_REGS as RegIndType),
             op: defaults.ops[rng.gen_range(0, defaults.ops.len())],
         }
+    }
+
+    pub fn contains(&self, x: u8) -> bool {
+        self.dest == x || self.op == x || self.src1 == x || self.src2 == x
+    }
+
+    pub fn contains_dest(&self, x: u8) -> bool {
+        self.dest == x
+    }
+
+    pub fn contains_op(&self, x: u8) -> bool {
+        self.op == x
+    }
+
+    pub fn contains_src(&self, x: u8) -> bool {
+        self.src1 == x || self.src2 == x
+    }
+
+    pub fn contains_reg(&self, x: u8) -> bool {
+        self.dest == x || self.src1 == x || self.src2 == x
+    }
+
+
+    pub fn is_branch(&self)->bool{
+        if let InstructionType::Skip = super::ops::get_type(self) {true}
+            else {false}
     }
 
 
@@ -126,31 +152,6 @@ impl Instruction{
 //        Instruction{dest, op, src1, src2}
 //    }
 //
-//    pub fn contains(&self, x: u8) -> bool {
-//        self.dest == x || self.op == x || self.src1 == x || self.src2 == x
-//    }
-//
-//    pub fn contains_dest(&self, x: u8) -> bool {
-//        self.dest == x
-//    }
-//
-//    pub fn contains_op(&self, x: u8) -> bool {
-//        self.op == x
-//    }
-//
-//    pub fn contains_src(&self, x: u8) -> bool {
-//        self.src1 == x || self.src2 == x
-//    }
-//
-//    pub fn contains_reg(&self, x: u8) -> bool {
-//        self.dest == x || self.src1 == x || self.src2 == x
-//    }
-//
-//
-//    pub fn is_branch(&self)->bool{
-//        if let InstructionType::Skip = super::ops::get_type(self) {true}
-//        else {false}
-//    }
 //
 //}
 //

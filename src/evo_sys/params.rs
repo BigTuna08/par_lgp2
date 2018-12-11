@@ -1,36 +1,38 @@
-pub const GEN_POP_SIZE: usize = 2500;
-//pub const GEN_POP_GENS: u32 = 250;
-
 
 // Rates are expressed as 1 in RATE chance (eg RATE = 20 => 1/20 = 4% chance)
 
 pub const REPLACE_EQ_FIT: u32 = 2; //rate to replace best when fitness is eq
 
-pub const INSTR_INSERT_RATE: u32 = 50; //rate to insert new instruction after copying instruction
-//pub const INSTR_DUPL_RATE: u32 = 50; //rate to duplicate new instruction after copying instruction
-pub const INSTR_DEL_RATE: u32 = 25; //rate to insert new instruction after copying instruction
 
-//pub const ADD_FEAT_RATE: u32 = 10; //rate to add new feat when copying genome
-//pub const REMOVE_FEAT_RATE: u32 = 10; //rate to add new feat when copying genome
-//pub const SWAP_FEAT_RATE: u32 = 10;
+pub const MICRO_MUT_RATE: f32 = 0.03f32;
+
+
+pub const DEL_RATE: f32 = 0.03f32;
+pub const DEL_CONT_RATE: f32 = 0.5;
+
+//pub const DUP_RATE: f32 = 0.02f32;
+//pub const DUP_CONT_RATE: f32 = 0.5;
+
+pub const COPY_RATE: f32 = 0.02f32;
+pub const COPY_CONT_RATE: f32 = 0.5;
+pub const QUEUE_V_LOCAL_COPY_RATE: f32 = 0.0f32;
+
+pub const ADD_FEAT_RATE: f32 = 0.02f32;
+pub const DEL_FEAT_RATE: f32 = 0.02f32;
+pub const CHG_FEAT_RATE: f32 = 0.02f32;
+
+
+pub const ADD_FEAT_MAX_REG: u8 = 50;  // Features will be added to regs with inds less than this
+
+pub const N_INSTR_OPTIONS: usize = 6;
+pub const INSTR_OPTIONS: [u8; N_INSTR_OPTIONS] = [0, 1, 2, 3, 6, 7];
+
+pub const QUEUE_LEN: usize = 20;
+
+
 //
-//pub const ADD_COMP_REG: u32 = 10;
-//pub const REMOVE_COMP_REG: u32 = 10;
-
-pub const MUT_INSTR_COPY_RATE: u32 = 20; // was 200
-
-
-
-//     Defaults for creating random program   ////
-
-//pub const DEFAULT_INSTR_MIN: usize = 1;
-//pub const DEFAULT_INSTR_MAX: usize = 20;
+//pub const INSTR_INSERT_RATE: u32 = 50; //rate to insert new instruction after copying instruction
+////pub const INSTR_DUPL_RATE: u32 = 50; //rate to duplicate new instruction after copying instruction
+//pub const INSTR_DEL_RATE: u32 = 25; //rate to insert new instruction after copying instruction
 //
-//pub const DEFAULT_CALC_REG_MIN: u8 = 1;
-//pub const DEFAULT_CALC_REG_MAX: u8 = 50;
-//
-//pub const DEFAULT_N_OPS_MIN: u8 = 8;
-//pub const DEFAULT_N_OPS_MAX: u8 = 8;
-//
-//pub const DEFAULT_FEAT_MIN: u8 = 1;
-//pub const DEFAULT_FEAT_MAX: u8 = 50;
+//pub const MUT_INSTR_COPY_RATE: u32 = 20; // was 200

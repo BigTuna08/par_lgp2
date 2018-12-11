@@ -5,6 +5,6 @@
 
 N_WORKER_THREADS:  3      // number of worker threads to spawn for evaluations
 WORKER_QUEUE_SIZE:  15  // number of programs a worker thread can have in its queue
-THREAD_POOL_MAX:  10000  // max number of evaluation requests the threadpool can hold
+THREAD_POOL_MAX:  1000  // max number of evaluation requests the threadpool can hold
 
 

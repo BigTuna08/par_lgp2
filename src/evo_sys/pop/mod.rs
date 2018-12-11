@@ -67,22 +67,6 @@ pub fn test(){
 }
 
 
-//    fn var_pen(&self, new_prog: &Program, old_prog: &Program, min_pen: f32, max_pen: f32, n_waves: f32, protect_start: u64, protect_end: u64 ) -> bool{
-//        let wave_input = (self.config.total_evals- self.recieved_count) as f32;
-//
-//        let period = self.config.total_evals - protect_start - protect_end;
-//        let period = (period as f32)/n_waves;
-//
-//        let mut v = (2.0*PI*wave_input/period).sin();
-//
-//
-//
-//        let vert_strech = (max_pen-min_pen)/2.0;
-//
-//        let vert_trans = max_pen - vert_strech;
-//
-//    }
-
 
 pub struct PopStats {
     pub best: f32,

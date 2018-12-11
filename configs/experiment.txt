@@ -4,24 +4,24 @@ MODE: MAP   // Sets population type. Options are MAP or GEN
 //     *** Effects both modes  ***
 
 
-OUT_FOLDER: long                   // any name, output folder will be created with this name
-N_ITERATIONS: 4                            // integer > 0
+OUT_FOLDER: nt                   // any name, output folder will be created with this name
+N_ITERATIONS: 5                            // integer > 0
 
 MUTATION_METHODS: 0                      // 1 or more integers, each separated by a space
-COMPARE_METHODS: 0                      // 1 or more integers, each separated by a space
-POPULATION_SIZE: 1000                   // 1 integer > 0
+COMPARE_METHODS: 1                      // 1 or more integers, each separated by a space
+POPULATION_SIZE: 900                   // 1 integer > 0
 
 DATA_FILE: inputs/data3.csv
 
-LOG_FREQ: 10000                     // # of evaluatoions between logging (might not work with gen??)
+LOG_FREQ: 10000                     // # of evaluations between logging (might not work with gen??)
 
 
 //    ***  For Map mode  ***
 
 
-N_EVALS: 25000000
-INITIAL_POP_SIZES: 2500000 250000 2500
-MAP_METHODS: 17
+N_EVALS: 1000000
+INITIAL_POP_SIZES: 50000
+MAP_METHODS: 0
 
 
 
