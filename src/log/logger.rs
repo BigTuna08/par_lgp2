@@ -183,6 +183,16 @@ impl Logger{  // From prog
         f.write(b"\n");
 
 
+        f.write(b"Effective\n");
+        for instr in genome.create_compressed().instructions.iter(){
+            let instr_str = self.string_instr(instr, &mut used_srcs);
+            f.write(instr_str.as_bytes());
+            f.write(b"\n");
+        }
+        f.write(b"\n");
+
+
+
     }
 
 
@@ -219,6 +229,19 @@ impl Logger{  // From prog
 
         let src2 = if used.contains(&instr.src2){format!("${}",instr.src2) }
                         else { format!("{}", PROG_REG[instr.src2 as usize])};
+
+        used.push(instr.dest);  //  <--- should first check not branch!
+        ops::formatted_string(instr, &src1, &src2)
+    }
+
+    pub fn string_instr_shoulduse(instr: &Instruction, used: &mut Vec<u8>) -> String{
+
+        let src1 = if used.contains(&instr.src1){ format!("${}",instr.src1) }
+            else { format!("{}",PROG_REG[instr.src1 as usize])  };
+
+
+        let src2 = if used.contains(&instr.src2){format!("${}",instr.src2) }
+            else { format!("{}", PROG_REG[instr.src2 as usize])};
 
         used.push(instr.dest);  //  <--- should first check not branch!
         ops::formatted_string(instr, &src1, &src2)

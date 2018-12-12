@@ -40,6 +40,27 @@ impl Runner{
         }
     }
 
+//
+//    pub fn prog_defaults(&self) -> ProgDefaults{
+//        let garbage_code = match self.mode {
+//            Mode::Map => {
+//                PopInfo::Map(MapInfo {
+//                    select_cell_method: self.config.map_methods[self.vec_3_i],
+//                    initial_pop: self.config.inital_pop_size[self.vec_2_i],
+//                    n_evals: self.config.n_evals[self.vec_1_i],
+//                })
+//            },
+//            Mode::Gen => {
+//                PopInfo::Gen(GenPopInfo {
+//                    tourn_size: self.config.tourn_sizes[self.vec_3_i],
+//                    total_gens: self.config.total_gens[self.vec_2_i],
+//                    random_gens: self.config.random_gens[self.vec_1_i],
+//                })
+//            },
+//        };
+//        garbage_code.create_result_map_config()
+//    }
+
 
     pub fn next_config(&mut self) -> Option<CoreConfig>{
         if !self.incr_inds(){

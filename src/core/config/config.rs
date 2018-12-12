@@ -98,10 +98,7 @@ pub fn process_prog_defaults(loc: &str) -> ProgDefaults {
         initial_instr_max: info.get_single_value("INITIAL_INSTR_MAX:"),
         initial_comp_reg_min: info.get_single_value("INITIAL_COMP_REG_MIN:"),
         initial_comp_reg_max: info.get_single_value("INITIAL_COMP_REG_MAX:"),
-//        initial_calc_reg_min: info.get_single_value("INITIAL_CALC_REG_MIN:"),
-//        initial_regs: info.get_single_value("INITIAL_REGS:"),
-//        ops: info.get_value_vec("OPS:"),
-//        initial_n_ops_max: info.get_single_value("INITIAL_N_OPS_MAX:"),
+
         initial_feat_min: info.get_single_value("INITIAL_FEAT_MIN:"),
         initial_feat_max: info.get_single_value("INITIAL_FEAT_MAX:"),
     }
