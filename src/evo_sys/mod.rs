@@ -19,6 +19,8 @@ use std::collections::VecDeque;
 use params as global_params;
 use core::{RegIndType, FeatIndType};
 
+//use serde::{Deserialize, Serialize};
+
 use core::GenoEval;
 use core::config::{ResultMapConfig, GenPopConfig};
 
@@ -87,6 +89,7 @@ pub type ExecutionRegArray = [f32; global_params::params::MAX_REGS];
 //}
 
 
+//#[derive(Serialize, Deserialize)]
 pub struct ResultMap{
     prog_map: Vec<Option<Program>>,
     pub config: ResultMapConfig,

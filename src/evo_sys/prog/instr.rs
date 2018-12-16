@@ -60,6 +60,25 @@ impl Instruction{
             else {false}
     }
 
+    pub fn to_save_string(&self) -> String {
+        format!("{} {} {} {}\t", self.dest, self.op, self.src1, self.src2)
+    }
+
+
+
+    pub fn from_load_string(ls: &str) -> Instruction {
+
+        let mut parts = ls.split(" ");
+
+//        println!("parts= {:?}", &parts);
+
+        let dest = parts.next().unwrap().parse::<u8>().unwrap();
+        let op = parts.next().unwrap().parse::<u8>().unwrap();
+        let src1 = parts.next().unwrap().parse::<u8>().unwrap();
+        let src2 = parts.next().unwrap().parse::<u8>().unwrap();
+
+        Instruction{dest, op, src1, src2}
+    }
 
 }
 

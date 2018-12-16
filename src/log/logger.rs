@@ -101,6 +101,9 @@ impl Logger {
 //        final_results.write_pop_info(&format!("{}/eff_feat_maps/{}", self.root_dir, file_name), ProgInspectRequest::Geno(&trackers::get_eff_feats));
 //        final_results.write_pop_info(&format!("{}/eff_len_maps/{}", self.root_dir, file_name), ProgInspectRequest::Geno(&trackers::get_eff_geno_len));
 
+        let saved_genos_loc = format!("{}/saved_genos.txt", self.root_dir);
+        final_results.write_to_store_compressed(&saved_genos_loc);
+
         println!("Before new line! ");
         self.new_line();
         self.current_iter += 1;

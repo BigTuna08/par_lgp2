@@ -101,7 +101,7 @@ fn log(instr: &Instruction, regs: &ExecutionRegArray) -> InstructionResult {
 //branch if greater
 fn big(instr: &Instruction, regs: &ExecutionRegArray) -> InstructionResult{
     if regs[instr.src1 as usize] > regs[instr.src2 as usize] {InstructionResult::Skip(1)} //branch
-        else {InstructionResult::NoOp} //dont
+        else {InstructionResult::Skip(0)} //dont
 }
 
 //send message to kill program execution

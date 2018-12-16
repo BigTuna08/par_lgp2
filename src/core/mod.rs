@@ -11,7 +11,7 @@ pub type ClassType = bool;
 
 #[derive(Debug)]
 pub struct Runner{
-    config: config::ConfigFile,
+    pub config: config::ConfigFile,
     mode: config::Mode,
     mutate_i: usize,
     compare_i: usize,

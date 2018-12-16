@@ -1,0 +1,49 @@
+opening configs/experiment.txt
+runner Runner { config: ConfigFile { mode: Map, out_folder: "results/new", data_file: "inputs/data3.csv", n_iterations: 1, mutate_methods: [0], compare_methods: [1], pop_size: 900, n_evals: [50], inital_pop_size: [50], map_methods: [0], total_gens: [100, 500, 1000], random_gens: [50, 100, 500], tourn_sizes: [4, 16] }, mode: Map, mutate_i: 0, compare_i: 0, started: false, vec_1_i: 0, vec_2_i: 0, vec_3_i: 0 }
+begin make logger 
+opening configs/experiment.txt
+end make logger 
+opening configs/prog_defaults.txt
+opening configs/threadding.txt
+Beggining finish! 
+Before new line! 
+done finish! 
+finished prog len 0
+
+Instruction { dest: 0, op: 2, src1: 0, src2: 1 }
+finished prog len 1
+
+Instruction { dest: 0, op: 3, src1: 125, src2: 123 }
+finished prog len 1
+
+Instruction { dest: 0, op: 4, src1: 0, src2: 127 }
+Instruction { dest: 0, op: 2, src1: 125, src2: 127 }
+finished prog len 2
+
+Instruction { dest: 1, op: 2, src1: 1, src2: 5 }
+Instruction { dest: 0, op: 0, src1: 1, src2: 4 }
+finished prog len 2
+
+Instruction { dest: 0, op: 0, src1: 120, src2: 121 }
+Instruction { dest: 0, op: 4, src1: 121, src2: 0 }
+Instruction { dest: 0, op: 0, src1: 125, src2: 120 }
+finished prog len 3
+
+Instruction { dest: 4, op: 1, src1: 125, src2: 124 }
+Instruction { dest: 1, op: 0, src1: 126, src2: 4 }
+Instruction { dest: 0, op: 2, src1: 1, src2: 122 }
+finished prog len 3
+
+Instruction { dest: 0, op: 0, src1: 126, src2: 123 }
+Instruction { dest: 0, op: 3, src1: 125, src2: 0 }
+Instruction { dest: 0, op: 4, src1: 124, src2: 125 }
+Instruction { dest: 0, op: 3, src1: 125, src2: 121 }
+finished prog len 4
+
+Instruction { dest: 2, op: 0, src1: 2, src2: 3 }
+Instruction { dest: 0, op: 0, src1: 2, src2: 127 }
+Instruction { dest: 2, op: 4, src1: 3, src2: 2 }
+Instruction { dest: 0, op: 5, src1: 3, src2: 127 }
+Instruction { dest: 0, op: 0, src1: 0, src2: 3 }
+finished prog len 5
+

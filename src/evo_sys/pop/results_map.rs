@@ -154,6 +154,27 @@ impl ResultMap{
 
 impl ResultMap{ // Mess!
 
+    pub fn write_to_store_compressed(&self, file_name: &str){
+        let mut f = File::create(file_name).unwrap();
+        for prog in self.prog_map.iter(){
+            if let &Some(ref genome) = prog {
+                for feat in genome.features.iter(){
+                    f.write(feat.to_string().as_bytes());
+                    f.write(b" ");
+                }
+                f.write(b"|");
+
+                for instr in genome.create_compressed().instructions.iter(){
+                    f.write(instr.to_save_string().as_bytes());
+                }
+                f.write(b"\n");
+            }
+//            f.write(value.to_string().as_bytes());
+//            f.write(b"\t");
+//            f.write(b"\n");
+        }
+    }
+
     pub fn write_pop_info(&self, file_name: &str, eval: ProgInspectRequest) {
         let mut f = File::create(file_name).unwrap();
         for prog in self.prog_map.iter(){
