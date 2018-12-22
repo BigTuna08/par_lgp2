@@ -171,7 +171,7 @@ impl Program{ //                 Analysis / compress
 
 
         Program{
-            features: Vec::new(),
+            features: self.features.clone(),
             instructions: eff_instrs,
             n_calc_regs: self.n_calc_regs,
             test_fit:None,
@@ -179,6 +179,24 @@ impl Program{ //                 Analysis / compress
         }
     }
 
+
+    pub fn create_copy(&self) -> Program{
+        Program{
+            features:self.features.clone(),
+            instructions:self.instructions.clone(),
+            n_calc_regs: self.n_calc_regs,
+            test_fit: self.test_fit,
+            cv_fit: self.cv_fit,
+        }
+    }
+
+    pub fn same_instr(&self, p: &Program)-> bool {
+        if self.instructions.len() != p.instructions.len() {return false}
+        for (i1, i2) in self.instructions.iter().zip(p.instructions.iter()){
+            if i1 != i2 {return false}
+        }
+        return true
+    }
 
 
 
@@ -213,14 +231,29 @@ impl Program{ //                   Getters                                   //
     pub fn get_effective_feats(&self, return_reg_ind: u8) -> HashSet<u8>{
         let mut eff_regs = HashSet::new();
 
+
+
         for instr in self.create_compressed().instructions.iter(){
-//            let instr = self.instructions[instr_i];
-            eff_regs.insert(instr.src1);
-            eff_regs.insert(instr.src2);
+
+            match ops::get_type(instr) {
+                InstructionType::Value | InstructionType::Skip => {
+                    if instr.src1 as usize >= global_params::params::MAX_REGS - self.features.len(){
+                        let gi = self.features[global_params::params::MAX_REGS - instr.src1 as usize -1];
+                        eff_regs.insert(gi);
+                    }
+
+                    if instr.src2 as usize >= global_params::params::MAX_REGS - self.features.len(){
+                        let gi = self.features[global_params::params::MAX_REGS - instr.src2 as usize -1];
+                        eff_regs.insert(gi);
+                    };
+                },
+                _ => ()
+            }
         }
 
-        eff_regs.retain(|&x|  x >= (global_params::params::MAX_REGS - self.features.len()) as u8);
-        eff_regs.iter().map(|x| super::reg_2_feat(&self.features, x)).collect()
+//        eff_regs.retain(|&x|  x >= (global_params::params::MAX_REGS - self.features.len()) as u8);
+//        eff_regs.iter().map(|x| super::reg_2_feat(&self.features, x)).collect()
+        eff_regs
     }
 }
 

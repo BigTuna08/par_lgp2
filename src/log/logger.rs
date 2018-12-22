@@ -1,9 +1,12 @@
 use data::trackers;
 use data;
 use data::params::N_FEATURES;
+use params::params as global_params;
 use evo_sys::eval::registers::PROG_REG;
+
+
 use evo_sys::prog::ops;
-use evo_sys::{ResultMap, ProgInspectRequest, GenPop, Program, Instruction};
+use evo_sys::{ResultMap, ProgInspectRequest, GenPop, Program, Instruction, InstructionType};
 use evo_sys::pop::{PopStats};
 use core::config::CoreConfig;
 ////use evo_sys::prog::prog::Program;
@@ -19,6 +22,10 @@ use super::{FileSet, Logger};
 use std::fs::create_dir_all;
 use core::GenoEval;
 
+
+use std::collections::HashMap;
+
+use anal;
 
 
 impl FileSet{
@@ -117,16 +124,25 @@ impl Logger {
 impl Logger{  // From map
 
     pub fn write_genos(&self, file_name: &str, res_map: &ResultMap) {
+        let mut id = 0;
+        let data_set = data::DataSet::new(&res_map.config.data_file);
         match File::create(file_name) {
             Ok(mut f) => {
                 for prog in res_map.prog_map_iter(){
                     if let &Some(ref genome) = prog {
+//                        f.write(b"\nID#");
+
+                        let paths = anal::get_paths(genome, &data_set);
+                        let mut res = anal::eval_program_corrects(genome, &data_set, &paths);
+                        let tot = res.remove("total").unwrap();
+                        f.write(format!("\nID#{}", id).as_bytes());
+                        self.write_genome_words(genome, &mut f, res);
                         f.write(b"\n");
-                        self.write_genome_words(genome, &mut f);
-                        f.write(b"\n");
+                        f.write(format!("{}", &tot.to_string()).as_bytes());
         //                genome.write_effective_self_words(&mut f);
                         f.write(b"\n");
                         f.write(b"\n");
+                        id += 1;
                     }
                 }
             }
@@ -146,14 +162,14 @@ impl Logger{  // From map
 
 impl Logger{  // From prog
 
-    fn write_genome_words(&self, genome: &Program, f: &mut File){
+    fn write_genome_words(&self, genome: &Program, f: &mut File, res: HashMap<String, anal::SomeResult>){
 
         let mut used_srcs = Vec::new();    //  <--  Make into hashmap with values?
 
         let info = format!("{:?}\ntraining: {}, \ntest: {}\n", genome.get_inds_simple(), &genome.test_fit.unwrap(), &genome.cv_fit.unwrap());
-        f.write(b"\n\n## All instructions ## \n");
+//        f.write(b"\n\n## All instructions ## \n");
         f.write(info.as_bytes());
-        f.write(b"\n");
+        f.write(b"\nFeats used\n");
 
 //        println!("writting genome with sizes {}, {}, {}", &genome.header_instructions.len(), &genome.features.len(), &genome.instructions.len());
 //        for instr in genome.header_instructions.iter(){
@@ -170,25 +186,9 @@ impl Logger{  // From prog
 //        }
 //        f.write(b"\n");
 
-        for instr in genome.features.iter(){
-            let instr_str = instr.to_string();
-            f.write(instr_str.as_bytes());
-            f.write(b"\n");
-        }
-        f.write(b"\n");
-
-
-        for instr in genome.instructions.iter(){
-            let instr_str = self.string_instr(instr, &mut used_srcs);
-            f.write(instr_str.as_bytes());
-            f.write(b"\n");
-        }
-        f.write(b"\n");
-
-
-        f.write(b"Effective\n");
-        for instr in genome.create_compressed().instructions.iter(){
-            let instr_str = self.string_instr(instr, &mut used_srcs);
+        // features
+        for feat in genome.get_effective_feats(0).iter(){
+            let instr_str = data::metabolites::DATA_HEADERS[*feat as usize];
             f.write(instr_str.as_bytes());
             f.write(b"\n");
         }
@@ -196,57 +196,86 @@ impl Logger{  // From prog
 
 
 
-    }
-
-
-//    pub fn write_self_words(&self, f: &mut File){
-//        let mut used_srcs = Vec::new();    //  <--  Make into hashmap with values?
-//        f.write(b"\n\n## All instructions ##\n");
-//        for instr in self.instructions.iter(){
+        // All instr
+//        for instr in genome.instructions.iter(){
 //            let instr_str = self.string_instr(instr, &mut used_srcs);
 //            f.write(instr_str.as_bytes());
 //            f.write(b"\n");
 //        }
 //        f.write(b"\n");
-//    }
-//
-//
-//    pub fn write_effective_self_words(&self, f: &mut File){
-//        let mut used_srcs = Vec::new();
-//        f.write(b"## Effective instructions ## \n");
-//        for instr_i in self.get_effective_instrs_good(0){
-//            let instr = self.instructions[instr_i];
-//            let instr_str = self.string_instr(&instr, &mut used_srcs);
+
+
+//        for instr in genome.create_compressed().instructions.iter(){
+//            let instr_str = format!("{:?}", instr);
 //            f.write(instr_str.as_bytes());
 //            f.write(b"\n");
 //        }
 //        f.write(b"\n");
-//    }
 
 
-    pub fn string_instr(&self, instr: &Instruction, used: &mut Vec<u8>) -> String{
+        used_srcs.clear();
+        f.write(b"Effective\n");
+        for instr in genome.create_compressed().instructions.iter(){
+//            let instr_str = self.string_instr(instr, &mut used_srcs);
+            let instr_str = Logger::string_instr(instr, &mut used_srcs, &genome.features);
+            f.write(instr_str.as_bytes());
+            f.write(b"\n");
+        }
+        f.write(b"\n\n");
 
-        let src1 = if used.contains(&instr.src1){ format!("${}",instr.src1) }
-                        else { format!("{}",PROG_REG[instr.src1 as usize])  };
 
 
-        let src2 = if used.contains(&instr.src2){format!("${}",instr.src2) }
-                        else { format!("{}", PROG_REG[instr.src2 as usize])};
+        
+//        res.remove("totals");
+        if res.len() <= 4{
+            used_srcs.clear();
 
-        used.push(instr.dest);  //  <--- should first check not branch!
-        ops::formatted_string(instr, &src1, &src2)
+            for (k,v) in res.iter(){
+                let s = format!("{:8}\t{}", k, v.to_string());
+                f.write(s.as_bytes());
+                f.write(b"\n");
+            }
+            f.write(b"\n\n");
+
+        }
+        else { f.write(b"to many {}, res.len()" ); }
+
+
+
+
     }
 
-    pub fn string_instr_shoulduse(instr: &Instruction, used: &mut Vec<u8>) -> String{
+
+
+    pub fn string_instr(instr: &Instruction, used: &mut Vec<u8>, feats: &Vec<u8>) -> String{
 
         let src1 = if used.contains(&instr.src1){ format!("${}",instr.src1) }
-            else { format!("{}",PROG_REG[instr.src1 as usize])  };
+            else {
+                if instr.src1 as usize >= global_params::MAX_REGS - feats.len(){
+                    let gi = feats[global_params::MAX_REGS - instr.src1 as usize -1];
+                    format!("{}",data::metabolites::DATA_HEADERS[gi as usize])
+                }
+                    else {
+                        format!("{}",PROG_REG[instr.src1 as usize])
+                    }
+            };
 
 
         let src2 = if used.contains(&instr.src2){format!("${}",instr.src2) }
-            else { format!("{}", PROG_REG[instr.src2 as usize])};
+            else {
+                if instr.src2 as usize >= global_params::MAX_REGS - feats.len(){
+                    let gi = feats[global_params::MAX_REGS - instr.src2 as usize -1];
+                    format!("{}",data::metabolites::DATA_HEADERS[gi as usize])
+                }
+                    else {
+                        format!("{}",PROG_REG[instr.src2 as usize])
+                    }
+            };
 
-        used.push(instr.dest);  //  <--- should first check not branch!
+        if let InstructionType::Value = ops::get_type(instr){
+            used.push(instr.dest);
+        }
+
         ops::formatted_string(instr, &src1, &src2)
     }
 }

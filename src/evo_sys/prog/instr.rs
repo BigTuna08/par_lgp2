@@ -80,6 +80,11 @@ impl Instruction{
         Instruction{dest, op, src1, src2}
     }
 
+//    pub fn same(&self, other: Instruction)-> bool{
+//        self.dest == other.dest &&
+//            self.op ==
+//    }
+
 }
 
 

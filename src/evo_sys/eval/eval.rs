@@ -230,6 +230,44 @@ use data::DataSet;
 //
 //
 //
+
+
+pub fn eval_program_vec(genome: &Program, data: &DataSet) -> Vec<bool> {
+
+    let mut correct = 0.0f32;
+    let indetermine_score = 0.5;
+    let compressed_prog = genome.create_compressed();
+
+    let mut result_vec = Vec::with_capacity(data.records.len());
+
+    for record in data.records.iter() {
+
+        let mut regs = super::registers::PROG_REG.clone();
+
+
+        for (i, feature) in genome.features.iter().enumerate() { //load features
+            regs[params::params::MAX_REGS - 1 - i] = record.features[*feature as usize]
+
+        }
+
+        let prog_output = run_instructions(&compressed_prog.instructions, &mut regs);
+
+        let correct =
+            if prog_output.abs() < params::params::EPS { // count zero as no prediction made
+                false
+            }
+            else if prog_output.is_nan() { false} // garbage response, treat as wrong
+            else {  // good prediction
+                let classification_result = prog_output > 0.0;
+                classification_result == record.class
+            };
+        result_vec.push(correct);
+    }
+    result_vec
+}
+
+
+
 pub fn eval_program_corrects(genome: &Program, data: &DataSet) -> f32 {
 
     let mut correct = 0.0f32;
@@ -357,7 +395,7 @@ pub fn eval_compress(genome: &Program, data: &DataSet) {
 
 
     for instr in cp2.instructions.iter(){
-        let instr_str = Logger::string_instr_shoulduse(instr, &mut used_srcs);
+        let instr_str = Logger::string_instr(instr, &mut used_srcs, &cp2.features);
         println!("{}", instr_str);
     }
 
@@ -365,7 +403,7 @@ pub fn eval_compress(genome: &Program, data: &DataSet) {
 
     used_srcs = Vec::new();
     for instr in genome.instructions.iter(){
-        let instr_str = Logger::string_instr_shoulduse(instr, &mut used_srcs);
+        let instr_str = Logger::string_instr(instr, &mut used_srcs, &cp2.features);
         println!("{}", instr_str);
     }
     println!("*********");

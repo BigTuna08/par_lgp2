@@ -4,7 +4,7 @@ MODE: MAP   // Sets population type. Options are MAP or GEN
 //     *** Effects both modes  ***
 
 
-OUT_FOLDER: new                   // any name, output folder will be created with this name
+OUT_FOLDER: info2                   // any name, output folder will be created with this name
 N_ITERATIONS: 1                            // integer > 0
 
 MUTATION_METHODS: 0                      // 1 or more integers, each separated by a space
@@ -19,8 +19,8 @@ LOG_FREQ: 10000                     // # of evaluations between logging (might n
 //    ***  For Map mode  ***
 
 
-N_EVALS: 50
-INITIAL_POP_SIZES: 50
+N_EVALS: 500000
+INITIAL_POP_SIZES: 50000
 MAP_METHODS: 0
 
 

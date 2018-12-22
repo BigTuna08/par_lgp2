@@ -10,35 +10,58 @@ fn main() {
 
     let mut runner = par_lgp2::core::Runner::new("configs/experiment.txt");
     println!("runner {:?}", runner);
-//    runner.run_all_configs();
+    runner.run_all_configs();
 
 
-    let loc = "results/new/0_1_50_50_0/saved_genos.txt";//format!("{:?}/saved_genos.txt", runner.config.out_folder);
-    let progs = par_lgp2::load_progs(&loc);
+//    print_infos();
 
-    let cd = par_lgp2::anal::decompose(&progs[8]);
-
-    println!("{:?}", &cd.branches);
-    println!("{:?}", &cd.progs.len());
-    for p in cd.progs.iter(){
-        for i in p.instructions.iter(){
-            println!("{:?}", i)
-        }
-        println!("\n\n**");
-    }
-
-//    for p in progs.iter(){
+//    let cd = par_lgp2::anal::decompose(&progs[38]);
+//
+//    println!("{:?}", &cd.branches);
+//    println!("{:?}", &cd.progs.len());
+//    for p in cd.progs.iter(){
 //        for i in p.instructions.iter(){
 //            println!("{:?}", i)
 //        }
-//        println!("finished prog len {}\n", p.instructions.len());
+//        println!("\n\n**");
 //    }
-//    for i in progs[8].instructions.iter(){
-//        println!("{:?}", i)
-//    }
-//    println!("{:?}",progs[8])
-
+//
+//    println!("******\n\n\n");
+//
+//    let (test_data, training_data) = par_lgp2::data::DataSet::new_pair("inputs/data3.csv");
+//
+//    par_lgp2::anal::cond_eval(cd, &test_data);
 //    test_compress();
+}
+
+
+fn print_infos(){
+    let loc =  "results/info/0_1_500000_50000_0/saved_genos.txt";//"results/info/0_1_250000_25000_0/saved_genos.txt";
+
+
+    let progs = par_lgp2::load_progs(&loc);
+
+
+
+    let (test_data, training_data) = par_lgp2::data::DataSet::new_pair("inputs/data3.csv");
+
+    for (i, prog) in progs.iter().enumerate(){
+        let cd = par_lgp2::anal::decompose(prog);
+
+
+
+        if cd.progs.len() > 4 {
+
+//            println!("Skipping, len is {}", cd.progs.len());
+            continue
+        }
+
+        println!("id# {:?}", i);
+
+        par_lgp2::anal::cond_eval_threash(cd, &test_data, 0.85);
+
+//        println!("******\n\n");
+    }
 
 }
 

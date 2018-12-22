@@ -2,6 +2,7 @@ pub mod results_map;
 pub mod selectors;
 pub mod comparers;
 pub mod gen_pop;
+pub mod cvt_map;
 
 use std::fs::File;
 use std::io::Write;

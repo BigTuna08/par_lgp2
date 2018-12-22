@@ -37,7 +37,7 @@ pub struct Program{
 }
 
 
-#[derive(Copy, Clone, Debug)]
+#[derive(Copy, Clone, Debug, Hash, Eq, PartialEq)]
 pub struct Instruction{
     pub dest: u8,
     pub op: u8,
@@ -93,6 +93,15 @@ pub type ExecutionRegArray = [f32; global_params::params::MAX_REGS];
 pub struct ResultMap{
     prog_map: Vec<Option<Program>>,
     pub config: ResultMapConfig,
+    sent_count: u64,
+    pub recieved_count: u64
+}
+
+
+pub struct CVTMap{
+    prog_map: Vec<Option<Program>>,
+    pub config: ResultMapConfig,
+//    centriods: Vec<Vec<bool>>,
     sent_count: u64,
     pub recieved_count: u64
 }

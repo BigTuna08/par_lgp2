@@ -1,3 +1,4 @@
+//#![feature(i128_type)]
 extern crate csv;
 extern crate rand;
 
@@ -33,6 +34,8 @@ pub fn load_progs(loc: &str) -> Vec<evo_sys::Program> {
                 }
             }
         }
+
+        println!("loaded feats: {:?}", &features);
 
 
         let mut instructions = Vec::new();

@@ -1,7 +1,7 @@
 pub mod dataset;
 pub mod trackers; //functions for tracking info about programs during evolution
 pub mod params;
-
+pub mod metabolites;
 
 use core::{ClassType};
 

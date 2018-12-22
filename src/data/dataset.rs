@@ -18,6 +18,65 @@ impl DataRecord{
 
 
 impl DataSet{
+
+    pub fn new(data_file: &str) -> Box<DataSet> {
+        let mut rng = rand::thread_rng();
+
+
+        let f = File::open(data_file).unwrap();
+        let mut csv_rdr = ReaderBuilder::new()
+            .delimiter(b'\t')
+            .from_reader(f);
+
+
+        let mut records =  Vec::new();
+
+        for (record_i,result) in csv_rdr.records().enumerate() {
+            if let Ok(result) = result{
+//                println!("result is {:?}", result);
+
+                let mut class = None;
+                let mut features = [0.0f32; params::N_FEATURES as usize];
+                let mut feature_i = 0;
+
+                for (j, next_entry) in result.iter().enumerate() {
+                    if j == params::LBL_IND{
+                        class = Some(match next_entry {
+                            "0" => false,
+                            "1" => true,
+                            _ => panic!("Invalid classification field!!")
+                        });
+                    }
+                    else if j >= params::FEAT_RNG.start && j < params::FEAT_RNG.end {
+                        match next_entry.parse::<f32>() {
+                            Ok(entry) => {
+                                features[feature_i] = entry;
+                                feature_i+= 1;
+                            },
+                            Err(e) => {
+                                print!("Error reading something!! i={} j={} err is {:?}", feature_i, j, e);
+                                panic!("error getting inputs!, change code if dataset containt missing");
+                            }
+                        }
+                    }
+                }
+                assert_eq!(params::N_FEATURES as usize, feature_i, "error in features");
+                match class {
+                    Some(class) => {
+                        records.push(DataRecord{features, class});
+                    },
+                    None => panic!("Error getting class!"),
+                }
+
+            }
+            else {
+                panic!("bad record! i={}, {:?}", record_i, &result);
+            }
+        }
+        Box::new(DataSet{records})
+    }
+
+
     pub fn new_pair(data_file: &str) -> (Box<DataSet>, Arc<DataSet>) {
         let mut rng = rand::thread_rng();
 
